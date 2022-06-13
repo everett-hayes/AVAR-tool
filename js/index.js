@@ -1,12 +1,11 @@
-let checkExtensions = ['г', 'к', 'л', 'т', 'х', 'ц', 'ч'];
-
 let singleKeyMapping = {
+    ' ' : ' ', // because I'm lazy this must be here
     а : 'a',
     б : 'b',
     в : 'w',
     г : 'ɡ',
     д : 'd',
-    е : 'je',
+    е : 'е',
     ж : 'ʒ',
     з : 'z',
     и : 'i',
@@ -27,12 +26,39 @@ let singleKeyMapping = {
     ш : 'ʃ',
     щ : 'ʃː',
     ъ : 'ʔ',
-    э : 'e',
+    э : 'е',
     ю : 'ju',
     я : 'ja'
 }
 
 let doubleKeyMapping = {
+    ' ' : { // start of word case
+        е : ' jе'
+    },
+    у : {
+        е : 'ujе'
+    },
+    е : {
+        е : 'еjе'
+    },
+    а : {
+        е : 'ajе'
+    },
+    о : {
+        е : 'ojе'
+    },
+    э : {
+        е : 'ejе'
+    },
+    я : {
+        е : 'jajе'
+    },
+    и : {
+        е : 'ijе'
+    },
+    ю : {
+        е : 'jujе'
+    },
     г : {
         '1' : 'ʕ',
         ъ : 'ʁ',
@@ -68,6 +94,8 @@ function translateText(str) {
     let output = [];
     let arr = str.split("");
 
+    if (arr.length == 0) return "";
+
     for (let i = 0; i < arr.length; i++) {
 
         let char = arr[i];
@@ -76,6 +104,7 @@ function translateText(str) {
             output.push("<br>");
         } else if (doubleKeyMapping.hasOwnProperty(char) && i != arr.length - 1) {
 
+            // we have to check if we are looking at a possible edge case
             let nextChar = arr[i+1];
 
             if (doubleKeyMapping[arr[i]].hasOwnProperty(nextChar)) {
@@ -91,56 +120,11 @@ function translateText(str) {
         }
     }
 
+    // starting character edge case
+    if (arr[0] == 'е') output[0] = 'jе';
+
     return output.join("");
 }
-
-
-// let keyMapping = {
-//     а : 'a',
-//     б : 'b',
-//     в : 'w',
-//     г : 'ɡ',
-//     г1 : 'ʕ',
-//     гъ : 'ʁ',
-//     гь : 'h',
-//     д : 'd',
-//     е : 'je',
-//     ж : 'ʒ',
-//     з : 'z',
-//     и : 'i',
-//     й : 'j',
-//     к : 'k',
-//     къ : 'q',
-//     кь : 't͡ɫ’',
-//     к1 : 'к’',
-//     л : 'l',
-//     лъ : 'ɫ*',
-//     м : 'm',
-//     н : 'n',
-//     о : 'o',
-//     п : 'p',
-//     р : 'r',
-//     с : 's',
-//     т : 't',
-//     т1 : 't’',
-//     у : 'u',
-//     х : 'χ',
-//     хъ : 'qː',
-//     хь : 'xː',
-//     х1 : 'ħ',
-//     ц : 't͡s',
-//     ц1 : 't͡s’',
-//     ч : 't͡ʃ',
-//     ч1 : 't͡ʃ’',
-//     ш : 'ʃ',
-//     щ : 'ʃː',
-//     ъ : 'ʔ',
-//     э : 'e',
-//     ю : 'ju',
-//     я : 'ja'
-// }
-
-// check each character
 
 $('#input-text').keyup(function() {
 
